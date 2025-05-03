@@ -1,0 +1,25 @@
+# Node.js
+node_modules/
+dist/
+build/
+
+# Logs
+*.log
+
+# Arquivos de ambiente
+.env
+.env.local
+.env.*.local
+
+# Diretórios de IDEs e arquivos de sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Backend Java (se sobrou algo de versões anteriores)
+backend/target/
+
+# Frontend artefatos (caso use Next.js ou exportações futuras)
+frontend/.next/
+frontend/out/
