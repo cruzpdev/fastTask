@@ -10,6 +10,7 @@ app.use(express.json());
 // Rotas principais
 // Aqui você vai importar e usar as rotas reais da aplicação:
 const authRoutes = require('./routes/authRoutes');
+console.log('[DEBUG] Tipo de authRoutes:', typeof authRoutes);
 const taskRoutes = require('./routes/taskRoutes');
 
 app.use('/api/auth', authRoutes);
