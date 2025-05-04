@@ -11,7 +11,7 @@ const register = async (req, res) => {
   }
 
   try {
-    const [usuariosExistentes] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+    const [usuariosExistentes] = await db.query('SELECT * FROM usuarios WHERE email = ?', [email]);
 
     if (usuariosExistentes.length > 0) {
       return res.status(400).json({ message: 'E-mail já cadastrado.' });
@@ -19,7 +19,7 @@ const register = async (req, res) => {
 
     const senhaHash = await bcrypt.hash(senha, 10);
 
-    await db.query('INSERT INTO users (nome, email, senha) VALUES (?, ?, ?)', [nome, email, senhaHash]);
+    await db.query('INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)', [nome, email, senhaHash]);
 
     return res.status(201).json({ message: 'Usuário registrado com sucesso.' });
   } catch (error) {
@@ -36,7 +36,7 @@ const login = async (req, res) => {
   }
 
   try {
-    const [usuarios] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+    const [usuarios] = await db.query('SELECT * FROM usuarios WHERE email = ?', [email]);
 
     if (usuarios.length === 0) {
       return res.status(401).json({ message: 'Credenciais inválidas.' });

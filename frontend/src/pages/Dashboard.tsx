@@ -37,12 +37,15 @@ const Dashboard: React.FC = () => {
   } = useQuery('listas', buscarListas);
 
   // Consulta para buscar todas as tarefas (para o calendário)
-  const { 
-    data: tarefas, 
-    isLoading: carregandoTarefas, 
-    error: erroTarefas 
-  } = useQuery('todasTarefas', buscarTodasTarefas);
-
+  const {
+    data: tarefas,
+    isLoading: carregandoTarefas,
+    error: erroTarefas,
+    refetch: refetchTarefas
+  } = useQuery('todasTarefas', buscarTodasTarefas, {
+    retry: false
+  });
+  
   // Mutação para criar lista
   const criarListaMutation = useMutation(
     (data: CriarListaDTO) => criarLista(data),
@@ -127,6 +130,10 @@ const Dashboard: React.FC = () => {
   const formatarData = (data: Date): string => {
     return format(data, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
   };
+
+  React.useEffect(() => {
+    refetchTarefas();
+  }, []);  
 
   if (carregandoListas && !listas) {
     return (

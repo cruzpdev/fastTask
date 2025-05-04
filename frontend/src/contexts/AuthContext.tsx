@@ -70,7 +70,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await api.post('/api/v1/auth/login', { email, senha: password });
+      const response = await api.post('/api/auth/login', { email, senha: password });
       const { token } = response.data;
       
       localStorage.setItem('@FastTask:token', token);
@@ -89,7 +89,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const register = async (name: string, email: string, password: string) => {
     try {
-      await api.post('/api/v1/auth/cadastro', { nome: name, email, senha: password });
+      await api.post('/api/auth/register', { nome: name, email, senha: password });
     } catch (error) {
       throw error;
     }
@@ -97,7 +97,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const forgotPassword = async (email: string) => {
     try {
-      await api.post('/api/v1/auth/solicitar-recuperacao', { email });
+      await api.post('/api/auth/solicitar-recuperacao', { email });
     } catch (error) {
       throw error;
     }

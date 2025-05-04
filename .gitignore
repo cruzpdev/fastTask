@@ -17,8 +17,6 @@ build/
 .DS_Store
 Thumbs.db
 
-# Backend Java (se sobrou algo de versões anteriores)
-backend/target/
 
 # Frontend artefatos (caso use Next.js ou exportações futuras)
 frontend/.next/
