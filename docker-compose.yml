@@ -2,40 +2,50 @@ version: '3.8'
 
 services:
   db:
-    image: mysql:5.7
-    container_name: mysql_fasttask
-    restart: always
+    image: mysql:8.0
     environment:
-      MYSQL_DATABASE: fast_task_db
+      MYSQL_ROOT_PASSWORD: root_pass
+      MYSQL_DATABASE: fasttask
       MYSQL_USER: fast_task_user
-      MYSQL_PASSWORD: fast_task_password
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root_pass
     volumes:
       - db_data:/var/lib/mysql
+      - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
       - "3307:3306"
 
   backend:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
-    container_name: fasttask_backend
-    restart: always
+    # As variáveis de DB e JWT agora vêm direto do Compose:
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: fast_task_user
+      DB_PASSWORD: root_pass
+      DB_NAME: fasttask
+
+      JWT_SECRET: a_chave_super_secreta_123
+      FRONTEND_URL: http://localhost:3002
+      PORT: 3001
+      NODE_ENV: production
     depends_on:
       - db
     ports:
-      - "8080:8080"
+      - '3001:3001'
 
   frontend:
-    image: node:18
-    working_dir: /app
-    volumes:
-      - ./frontend:/app
-    command: sh -c "npm install && npm run build && npm run preview"
-    ports:
-      - "5173:4173"
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    # Apenas VITE_API_URL é necessário:
+    environment:
+      VITE_API_URL: /api
     depends_on:
       - backend
+    ports:
+      - '3002:80'
 
 volumes:
   db_data:

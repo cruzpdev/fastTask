@@ -1,20 +1,18 @@
-# Imagem oficial do Node.js
-FROM node:18
+# Use Debian slim (compatível com o bcryptjs pré-compilado)
+FROM node:18-bullseye-slim
 
-# Diretório de trabalho no container
+# Diretório de trabalho
 WORKDIR /app
 
-# Copiar apenas os arquivos de dependências para cache
+# Copia e instala dependências
 COPY package*.json ./
+RUN npm ci
 
-# Instalar as dependências
-RUN npm install
-
-# Copiar o restante dos arquivos da aplicação
+# Copia o restante do código
 COPY . .
 
-# Expor a porta que o Express utiliza
+# Exponha a porta que o app usa
 EXPOSE 3001
 
-# Comando para iniciar a aplicação
-CMD ["node", "src/index.js"]
+# Comando de inicialização
+CMD ["npm", "start"]

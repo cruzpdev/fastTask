@@ -70,7 +70,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await api.post('/api/auth/login', { email, senha: password });
+      const response = await api.post('/auth/login', { email, senha: password });
       const { token } = response.data;
       
       sessionStorage.setItem('token', token);
@@ -90,7 +90,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const register = async (name: string, email: string, password: string) => {
     try {
-      await api.post('/api/auth/register', { nome: name, email, senha: password });
+      await api.post('/auth/register', { nome: name, email, senha: password });
     } catch (error) {
       throw error;
     }

@@ -37,19 +37,19 @@ export interface ReordenarTarefasDTO {
 
 // Buscar todas as tarefas de uma lista
 export const buscarTarefas = async (listaId: number): Promise<Tarefa[]> => {
-  const response = await api.get(`/api/tasks/listas/${listaId}/tarefas`);
+  const response = await api.get(`/tasks/listas/${listaId}/tarefas`);
   return response.data;
 };
 
 // Buscar uma tarefa específica
 export const buscarTarefa = async (id: number): Promise<Tarefa> => {
-  const response = await api.get(`/api/tasks/tarefas/${id}`);
+  const response = await api.get(`/tasks/tarefas/${id}`);
   return response.data;
 };
 
 // Criar uma nova tarefa
 export const criarTarefa = async (data: CriarTarefaDTO): Promise<Tarefa> => {
-  const response = await api.post("/api/tasks/tarefas", data);
+  const response = await api.post("/tasks/tarefas", data);
   return response.data;
 };
 
@@ -58,13 +58,13 @@ export const atualizarTarefa = async (
   id: number,
   data: AtualizarTarefaDTO
 ): Promise<Tarefa> => {
-  const response = await api.put(`/api/tasks/tarefas/${id}`, data);
+  const response = await api.put(`/tasks/tarefas/${id}`, data);
   return response.data;
 };
 
 // Excluir uma tarefa
 export const excluirTarefa = async (id: number): Promise<void> => {
-  await api.delete(`/api/tasks/tarefas/${id}`);
+  await api.delete(`/tasks/tarefas/${id}`);
 };
 
 // Marcar tarefa como concluída ou não concluída
@@ -72,7 +72,7 @@ export const alterarStatusTarefa = async (
   id: number,
   concluida: boolean
 ): Promise<Tarefa> => {
-  const response = await api.patch(`/api/tasks/tarefas/${id}/status`, {
+  const response = await api.patch(`/tasks/tarefas/${id}/status`, {
     concluida,
   });
   return response.data;
@@ -83,11 +83,11 @@ export const reordenarTarefas = async (
   listaId: number,
   data: ReordenarTarefasDTO
 ): Promise<void> => {
-  await api.post(`/api/tasks/listas/${listaId}/tarefas/reordenar`, data);
+  await api.post(`/tasks/listas/${listaId}/tarefas/reordenar`, data);
 };
 
 // Buscar todas as tarefas do usuário (para o calendário)
 export const buscarTodasTarefas = async (): Promise<Tarefa[]> => {
-  const response = await api.get("/api/tasks/tarefas");
+  const response = await api.get("/tasks/tarefas");
   return response.data;
 };

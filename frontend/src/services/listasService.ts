@@ -34,19 +34,19 @@ const authHeader = () => {
 
 // Buscar todas as listas do usuário
 export const buscarListas = async (): Promise<Lista[]> => {
-  const response = await api.get("/api/tasks/listas", authHeader());
+  const response = await api.get("/tasks/listas", authHeader());
   return response.data;
 };
 
 // Buscar uma lista específica
 export const buscarLista = async (id: number): Promise<Lista> => {
-  const response = await api.get(`/api/tasks/listas/${id}`, authHeader());
+  const response = await api.get(`/tasks/listas/${id}`, authHeader());
   return response.data;
 };
 
 // Criar uma nova lista
 export const criarLista = async (data: CriarListaDTO): Promise<Lista> => {
-  const response = await api.post("/api/tasks/listas", data, authHeader());
+  const response = await api.post("/tasks/listas", data, authHeader());
   return response.data;
 };
 
@@ -55,11 +55,11 @@ export const atualizarLista = async (
   id: number,
   data: AtualizarListaDTO
 ): Promise<Lista> => {
-  const response = await api.put(`/api/tasks/listas/${id}`, data, authHeader());
+  const response = await api.put(`/tasks/listas/${id}`, data, authHeader());
   return response.data;
 };
 
 // Excluir uma lista
 export const excluirLista = async (id: number): Promise<void> => {
-  await api.delete(`/api/tasks/listas/${id}`, authHeader());
+  await api.delete(`/tasks/listas/${id}`, authHeader());
 };

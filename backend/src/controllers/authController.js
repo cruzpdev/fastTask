@@ -1,9 +1,9 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 
 // Registro de novo usuário
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   const { nome, email, senha } = req.body;
 
   if (!nome || !email || !senha) {
@@ -17,18 +17,19 @@ const register = async (req, res) => {
       return res.status(400).json({ message: 'E-mail já cadastrado.' });
     }
 
-    const senhaHash = await bcrypt.hash(senha, 10);
+    const senhaHash = bcrypt.hashSync(senha, 10);
 
     await db.query('INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)', [nome, email, senhaHash]);
 
     return res.status(201).json({ message: 'Usuário registrado com sucesso.' });
   } catch (error) {
-    return res.status(500).json({ message: 'Erro ao registrar usuário.', error });
+    console.error('Erro ao registrar usuário:', error);
+    next(error);
   }
 };
 
 // Login do usuário
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   const { email, senha } = req.body;
 
   if (!email || !senha) {
@@ -43,7 +44,7 @@ const login = async (req, res) => {
     }
 
     const usuario = usuarios[0];
-    const senhaValida = await bcrypt.compare(senha, usuario.senha);
+    const senhaValida = bcrypt.compareSync(senha, usuario.senha);
 
     if (!senhaValida) {
       return res.status(401).json({ message: 'Credenciais inválidas.' });
@@ -55,7 +56,8 @@ const login = async (req, res) => {
 
     return res.status(200).json({ token, usuario: { id: usuario.id, nome: usuario.nome, email: usuario.email } });
   } catch (error) {
-    return res.status(500).json({ message: 'Erro ao fazer login.', error });
+    console.error('Erro ao registrar usuário:', error);
+    next(error);
   }
 };
 
