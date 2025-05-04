@@ -37,7 +37,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     async function loadStoredData() {
-      const storedToken = localStorage.getItem('@FastTask:token');
+      const storedToken = sessionStorage.getItem('token');
       
       if (storedToken) {
         try {
@@ -46,7 +46,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           // Verificar se o token expirou
           const currentTime = Date.now() / 1000;
           if (decoded.exp < currentTime) {
-            localStorage.removeItem('@FastTask:token');
+            sessionStorage.removeItem('token');
             setUser(null);
           } else {
             api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
         } catch (error) {
           // Token inválido
-          localStorage.removeItem('@FastTask:token');
+          sessionStorage.removeItem('token');
         }
       }
       
@@ -73,8 +73,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await api.post('/api/auth/login', { email, senha: password });
       const { token } = response.data;
       
-      localStorage.setItem('@FastTask:token', token);
+      sessionStorage.setItem('token', token);
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      console.log("Token recebido e salvo:", token)
       
       const decoded = jwtDecode<TokenPayload>(token);
       setUser({
@@ -104,7 +105,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('@FastTask:token');
+    sessionStorage.removeItem('token');
     api.defaults.headers.common['Authorization'] = '';
     setUser(null);
   };

@@ -30,11 +30,11 @@ const Dashboard: React.FC = () => {
   const [visualizacao, setVisualizacao] = useState<'listas' | 'calendario'>('listas');
 
   // Consulta para buscar listas
-  const { 
-    data: listas, 
-    isLoading: carregandoListas, 
-    error: erroListas 
-  } = useQuery('listas', buscarListas);
+  const {
+    data: listas = [], // <-- valor padrão definido aqui
+    isLoading: carregandoListas,
+    error: erroListas,
+  } = useQuery('listas', buscarListas);  
 
   // Consulta para buscar todas as tarefas (para o calendário)
   const {
@@ -135,25 +135,25 @@ const Dashboard: React.FC = () => {
     refetchTarefas();
   }, []);  
 
-  if (carregandoListas && !listas) {
+  if (carregandoListas) {
     return (
       <div className="container">
-        <Header />
+        <Header titulo="FAST TASK" />
         <div className="carregando-container">
-          <div className="carregando-spinner"></div>
+          <div className="carregando-spinner" />
           <p>Carregando listas...</p>
         </div>
       </div>
     );
   }
-
+  
   if (erroListas) {
     return (
       <div className="container">
-        <Header />
+        <Header titulo="FAST TASK" />
         <div className="erro-container">
           <p>Erro ao carregar listas. Por favor, tente novamente.</p>
-          <button 
+          <button
             onClick={() => queryClient.invalidateQueries('listas')}
             className="botao-tentar-novamente"
           >
@@ -163,7 +163,19 @@ const Dashboard: React.FC = () => {
       </div>
     );
   }
-
+  
+  if (!carregandoListas && listas.length === 0) {
+    return (
+      <div className="container">
+        <Header titulo="FAST TASK" />
+        <div className="lista-vazia-container">
+          <p>Você ainda não tem nenhuma lista criada.</p>
+          <p>Clique no botão "+" para começar!</p>
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <div className="container">
       <Header titulo="FAST TASK" />
@@ -223,8 +235,7 @@ const Dashboard: React.FC = () => {
                 <p>Você ainda não tem nenhuma lista de tarefas.</p>
                 <button 
                   onClick={handleAbrirModal}
-                  className="botao-criar-primeira-lista"
-                >
+                  className="botao-criar-primeira-lista">
                   Criar minha primeira lista
                 </button>
               </div>

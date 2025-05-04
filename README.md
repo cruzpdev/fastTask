@@ -158,7 +158,7 @@ A aplicação foi recentemente corrigida para resolver os seguintes problemas:
 
 ### Problemas de autenticação
 
-- Limpe o localStorage do navegador
+- Limpe o sessionStorage do navegador
 - Verifique se o token JWT está sendo gerado e armazenado corretamente
 
 ## Executando em Ambiente de Produção

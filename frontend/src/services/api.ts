@@ -1,17 +1,17 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001',
+  baseURL: "http://localhost:3001",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 // Interceptor para adicionar o token em todas as requisições
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('@FastTask:token');
-    if (token) {
+    const token = sessionStorage.getItem("token");
+    if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -29,9 +29,9 @@ api.interceptors.response.use(
   (error) => {
     // Se o erro for 401 (Unauthorized), pode ser que o token expirou
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('@FastTask:token');
+      sessionStorage.removeItem("token");
       // Redirecionar para a página de login se necessário
-      window.location.href = '/login';
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }
